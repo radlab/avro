@@ -18,6 +18,9 @@
 package org.apache.avro.specific;
 
 import org.apache.avro.Schema;
+import org.apache.avro.io.BinaryEncoder;
+
+import java.io.ByteArrayOutputStream;
 
 /** Base class for generated record classes. */
 public abstract class SpecificRecordBase
@@ -26,6 +29,15 @@ public abstract class SpecificRecordBase
   public abstract Schema getSchema();
   public abstract Object get(int field);
   public abstract void put(int field, Object value);
+
+  @SuppressWarnings(value="unchecked")
+  public byte[] toBytes() throws java.io.IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    BinaryEncoder enc = new BinaryEncoder(out);
+    SpecificDatumWriter writer = new SpecificDatumWriter(getSchema());
+    writer.write(this, enc);
+    return out.toByteArray();
+  }
 
   @Override
   public boolean equals(Object that) {
