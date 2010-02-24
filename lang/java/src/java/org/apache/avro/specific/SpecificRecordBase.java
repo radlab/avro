@@ -42,20 +42,20 @@ public abstract class SpecificRecordBase
   }
 
   @SuppressWarnings(value="unchecked")
-	public void parse(java.nio.ByteBuffer buff) throws java.io.IOException {
-		ByteArrayInputStream in = new ByteArrayInputStream(buff.array(), buff.position(), buff.limit() - buff.position());
-		BinaryDecoder dec = new BinaryDecoder(in);
-		SpecificDatumReader reader = new SpecificDatumReader(getSchema());
-		reader.read(this, dec);
-	}
+  public void parse(java.nio.ByteBuffer buff) throws java.io.IOException {
+    ByteArrayInputStream in = new ByteArrayInputStream(buff.array(), buff.position(), buff.limit() - buff.position());
+    BinaryDecoder dec = new BinaryDecoder(in);
+    SpecificDatumReader reader = new SpecificDatumReader(getSchema());
+    reader.read(this, dec);
+  }
 
   @SuppressWarnings(value="unchecked")
-	public void parse(byte[] bytes) throws java.io.IOException {
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-		BinaryDecoder dec = new BinaryDecoder(in);
-		SpecificDatumReader reader = new SpecificDatumReader(getSchema());
-		reader.read(this, dec);
-	}
+  public void parse(byte[] bytes) throws java.io.IOException {
+    ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+    BinaryDecoder dec = new BinaryDecoder(in);
+    SpecificDatumReader reader = new SpecificDatumReader(getSchema());
+    reader.read(this, dec);
+  }
 
   @Override
   public boolean equals(Object that) {
