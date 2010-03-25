@@ -21,8 +21,9 @@ import org.apache.avro.Schema;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.BinaryDecoder;
 
-import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 /** Base class for generated record classes. */
 public abstract class SpecificRecordBase
@@ -42,8 +43,16 @@ public abstract class SpecificRecordBase
   }
 
   @SuppressWarnings(value="unchecked")
-  public void parse(java.nio.ByteBuffer buff) throws java.io.IOException {
-    ByteArrayInputStream in = new ByteArrayInputStream(buff.array(), buff.position(), buff.limit() - buff.position());
+  public void parse(final java.nio.ByteBuffer buff) throws java.io.IOException {
+    InputStream in = new InputStream() {
+     public int read() {
+      if(buff.remaining() > 0)
+        return buff.get();
+      else
+        return -1;
+     }
+    };
+
     BinaryDecoder dec = new BinaryDecoder(in);
     SpecificDatumReader reader = new SpecificDatumReader(getSchema());
     reader.read(this, dec);
