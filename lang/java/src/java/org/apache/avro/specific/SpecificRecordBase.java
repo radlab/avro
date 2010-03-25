@@ -44,21 +44,23 @@ public abstract class SpecificRecordBase
   }
 
   @SuppressWarnings(value="unchecked")
-  public void parse(ByteBuffer buff) throws java.io.IOException {
-    final ByteBuffer localBuff = buff.duplicate();
-    InputStream in = new InputStream() {
-     public int read() {
-      if(localBuff.remaining() > 0)
-        return localBuff.get();
-      else
-        return -1;
-     }
-    };
+    public void parse(ByteBuffer buff) throws java.io.IOException {
+      System.out.println(buff);
+      System.out.println(buff.array());
+      final ByteBuffer localBuff = buff.duplicate();
+      InputStream in = new InputStream() {
+        public int read() {
+          if(localBuff.remaining() > 0)
+            return localBuff.get() & 0x00FF;
+          else
+            return -1;
+        }
+      };
 
-    BinaryDecoder dec = new BinaryDecoder(in);
-    SpecificDatumReader reader = new SpecificDatumReader(getSchema());
-    reader.read(this, dec);
-  }
+      BinaryDecoder dec = new BinaryDecoder(in);
+      SpecificDatumReader reader = new SpecificDatumReader(getSchema());
+      reader.read(this, dec);
+    }
 
   @SuppressWarnings(value="unchecked")
   public void parse(byte[] bytes) throws java.io.IOException {
