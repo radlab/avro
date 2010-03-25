@@ -24,6 +24,7 @@ import org.apache.avro.io.BinaryDecoder;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 
 /** Base class for generated record classes. */
 public abstract class SpecificRecordBase
@@ -43,11 +44,12 @@ public abstract class SpecificRecordBase
   }
 
   @SuppressWarnings(value="unchecked")
-  public void parse(final java.nio.ByteBuffer buff) throws java.io.IOException {
+  public void parse(ByteBuffer buff) throws java.io.IOException {
+    final ByteBuffer localBuff = buff.duplicate();
     InputStream in = new InputStream() {
      public int read() {
-      if(buff.remaining() > 0)
-        return buff.get();
+      if(localBuff.remaining() > 0)
+        return localBuff.get();
       else
         return -1;
      }
